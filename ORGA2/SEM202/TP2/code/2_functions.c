@@ -554,9 +554,9 @@ void generateOutImgFromStruct( FILE_MERGE *filesToMerge, int executionType ) {
     fread( &img02Buffer, sizeof( img02Buffer ), 1, fImg02 );
     fread( &maskBuffer, sizeof( maskBuffer ), 1, fMask );
 	
-    fread( &img01Buffer, sizeof( img01Buffer2 ), 1, fImg01 );
-    fread( &img02Buffer, sizeof( img02Buffer2 ), 1, fImg02 );
-    fread( &maskBuffer, sizeof( maskBuffer2 ), 1, fMask );
+    fread( &img01Buffer2, sizeof( img01Buffer2 ), 1, fImg01 );
+    fread( &img02Buffer2, sizeof( img02Buffer2 ), 1, fImg02 );
+    fread( &maskBuffer2, sizeof( maskBuffer2 ), 1, fMask );
 
     // strcpy( img01Buffer, "B" );
 
