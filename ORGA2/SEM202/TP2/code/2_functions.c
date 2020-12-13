@@ -4,7 +4,7 @@
 #include <string.h>//Para la comparacion de strings
 #include "2_structs.h" //Archivo donde se encuentran todas las structs.
 
-extern void hola( char *img01Buffer, char *img02Buffer, char *maskbuffer, char *outPutFile, int columns, int row, int padding );
+extern void enmascarar_asm( char *img01Buffer, char *img02Buffer, char *maskbuffer, int padding );
 
 // char bmpFolderName[] = "bmps";
 char mascara[] = "mascara";
@@ -524,11 +524,19 @@ void generateOutImgFromStruct( FILE_MERGE *filesToMerge, int executionType ) {
     if ( maskPadding != 0 ) {
         maskPadding = 4 - maskPadding;
     }
+    
+    // Si el ancho no es divisible por 8 entonces le tenemos que agregar bits hasta que sea divisible.
+    maskPadding2 = ( ( int ) hinfoImg01.width ) % 8;
+    if ( maskPadding2 != 0 ) {
+        maskPadding2 = 8 - maskPadding2;
+    }
 
     rowPixels = ( int ) hinfoImg01.height;
-	columnPixels = ( int ) hinfoImg01.width;
+    
+    columnPixels = ( int ) hinfoImg01.width;
 
     int matrizImgSize = rowPixels * ( columnPixels * 3 + maskPadding );
+    int matrizImgSize2 = rowPixels * ( columnPixels * 3 + maskPadding2 );
 
     // printf( "%d\n", matrizImgSize );
 
@@ -536,10 +544,19 @@ void generateOutImgFromStruct( FILE_MERGE *filesToMerge, int executionType ) {
     char img02Buffer[ matrizImgSize ];
     char maskBuffer[ matrizImgSize ];
     char outBuffer[ matrizImgSize ];
+	
+    char img01Buffer2[ matrizImgSize2 ];
+    char img02Buffer2[ matrizImgSize2 ];
+    char maskBuffer2[ matrizImgSize2 ];
+    char outBuffer2[ matrizImgSize2 ];
 
     fread( &img01Buffer, sizeof( img01Buffer ), 1, fImg01 );
     fread( &img02Buffer, sizeof( img02Buffer ), 1, fImg02 );
     fread( &maskBuffer, sizeof( maskBuffer ), 1, fMask );
+	
+    fread( &img01Buffer, sizeof( img01Buffer2 ), 1, fImg01 );
+    fread( &img02Buffer, sizeof( img02Buffer2 ), 1, fImg02 );
+    fread( &maskBuffer, sizeof( maskBuffer2 ), 1, fMask );
 
     // strcpy( img01Buffer, "B" );
 
@@ -556,14 +573,14 @@ void generateOutImgFromStruct( FILE_MERGE *filesToMerge, int executionType ) {
             break;
         case 4:
             // printf( "Ejecución de %s desde ASM.\n", filesToMerge->id );
-            hola( img01Buffer, img02Buffer, maskBuffer, outBuffer, columnPixels, rowPixels, maskPadding );
+            enmascarar_asm( img01Buffer2, img02Buffer2, maskBuffer2, maskPadding2);
             break;
         default:
             printf( "Ejecucion fuera de parametros [%s].\n", filesToMerge->id );
             break;
     }
 
-    fwrite( &outBuffer, sizeof( outBuffer ), 1, fOut );
+    // fwrite( &img01Buffer, sizeof( img01Buffer ), 1, fOut );
 
     // // //Recorremos cada unas de las filas que contiene la imagen.
     // // for ( row = 0; row < rowPixels; row++ ) {
