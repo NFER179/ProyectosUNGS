@@ -93,6 +93,6 @@ for f in $2/${bmpFiles}/*.jpg; do
     rm $f
 done
 
-nasm -f elf32 2_SASM_function.s -o 2_SASM_function.o
-gcc -m32 -o executable 2_SASM_function.o 2_main_v02.c 2_functions.c -lpthread
+nasm -f elf32 2_SASM_function_v02.s
+gcc -m32 -o executable 2_SASM_function_v02.o 2_main_v02.c 2_functions.c -lpthread
 ./executable $2
