@@ -26,7 +26,8 @@ typedef struct {
     double sPthreadClockInFunctino;
     double cPthreadClockOutFunction;
     double cPthreadClockInFunction;
-    double asmClock;
+    double asmClockOutFunction;
+    double asmClockInFunction;
 } FILE_MERGE ;
 
 // Estructura para leer la informacion del header y saber si es un archivo bmp.

@@ -3,6 +3,7 @@
 #include <string.h>//Para la comparacion de strings
 #include <time.h>//Tiempo en clocks
 #include <pthread.h>//Hilos
+#include <stdlib.h>//malloc
 #include "2_structs.h" // Archivo con todas las structuras.
 
 //void write_in_csv( char *filename, struct CSV_LINE csvLine );
@@ -78,8 +79,8 @@ int main(int argc, char** argv){
     strcat( csvEachFile, reportPath );
     strcat( csvEachFile, csvSingleImgFileName );
 
-    write_in_csv( csvEachFile, "ARCHIVO, TIEMPO 1 HILO(CLOCK), TIEMPO VARIOS HILOS(CLOCK), TIEMPO SASM(CLOCK)" );
-
+    //write_in_csv( csvEachFile, "ARCHIVO, Main Out(seg), Main In(seg),Pthread Out (seg), Pthread In(seg), SASM Out(seg), SASM In(Seg)" );
+    write_in_csv( csvEachFile, "ARCHIVO, Main (seg),Pthread (seg), SASM (seg)" );
 
     // log file
     char logName[ strlen( value01 ) + strlen( reportPath ) + strlen( logFileName ) + 1 ];//El puntero tiene que tener el tamaño necesario para la copia del string.
@@ -184,7 +185,7 @@ int main(int argc, char** argv){
         total_t = end_t - start_t;
         allFiles_t = allFiles_t + total_t;
 
-        fileMerge[ i ].asmClock = (double) ( total_t ) / CLOCKS_PER_SEC ;
+        fileMerge[ i ].asmClockOutFunction = (double) ( total_t ) / CLOCKS_PER_SEC ;
     }
 
     // Impresion del total que tardo en procesar todas las imagenes con sasm
@@ -196,9 +197,39 @@ int main(int argc, char** argv){
     // <- Procesamiento en NASM
 
     // Last print of merges structs(to log and csv times)
+    //int csvLineSize = strlen( fileMerge[0].id ) + ( strlen( total_clock ) + 1 ) * 6 + 1;
+    int csvLineSize = 100;
+    char *csvEachFileLine;
     for( i = 0; i < cantidadmerge; i++ ) {
-        printf( "ImageId: %s\n", fileMerge[ i ].id );
-        printf( "Tardo en procesarlo:\n\tmain: %f,\n\tpthread: %f,\n\tasm: %f\n", fileMerge[ i ].sPthreadClockOutFunction, fileMerge[ i ].cPthreadClockOutFunction, fileMerge[ i ].asmClock );
+
+        csvEachFileLine = ( char *) malloc( csvLineSize );
+
+        strcpy( csvEachFileLine, fileMerge[ i ].id );
+        strcat( csvEachFileLine, "," );
+        sprintf( total_clock, "%f", fileMerge[ i ].sPthreadClockOutFunction );
+        strcat( csvEachFileLine, total_clock );
+        // strcat( csvEachFileLine, "," );
+        // sprintf( total_clock, "%f", fileMerge[ i ].sPthreadClockInFunctino );
+        // strcat( csvEachFileLine, total_clock );
+        strcat( csvEachFileLine, "," );
+        sprintf( total_clock, "%f", fileMerge[ i ].cPthreadClockOutFunction );
+        strcat( csvEachFileLine, total_clock );
+        strcat( csvEachFileLine, "," );
+        // sprintf( total_clock, "%f", fileMerge[ i ].cPthreadClockInFunction );
+        // strcat( csvEachFileLine, total_clock );
+        // strcat( csvEachFileLine, "," );
+        sprintf( total_clock, "%f", fileMerge[ i ].asmClockOutFunction );
+        strcat( csvEachFileLine, total_clock );
+        strcat( csvEachFileLine, "," );
+        // sprintf( total_clock, "%f", fileMerge[ i ].asmClockInFunction );
+        // strcat( csvEachFileLine, total_clock );
+        write_in_csv( csvEachFile, csvEachFileLine );
+
+        free( csvEachFileLine );
+        //sprintf( csvEachFileLine, "%s,%f,%f,%f,%f,%f,%f", fileMerge[ i ].id, fileMerge[ i ].sPthreadClockOutFunction, fileMerge[ i ].sPthreadClockInFunctino, fileMerge[ i ].cPthreadClockOutFunction, fileMerge[ i ].cPthreadClockInFunction, fileMerge[ i ].asmClockOutFunction, fileMerge[ i ].asmClockInFunction );
+
+//        printf( "ImageId: %s\n", fileMerge[ i ].id );
+//        printf( "Tardo en procesarlo:\n\tmain: %f,\n\tpthread: %f,\n\tasm: %f\n", fileMerge[ i ].sPthreadClockOutFunction, fileMerge[ i ].cPthreadClockOutFunction, fileMerge[ i ].asmClockOutFunction );
     }
 
     return 0;
