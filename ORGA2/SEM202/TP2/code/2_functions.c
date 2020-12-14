@@ -473,7 +473,7 @@ void generateOutImgFromStruct( FILE_MERGE *filesToMerge, int executionType ) {
     char maskFullPath[ intPathin + strlen( filesToMerge->mask_name ) + 1 ];
     char outFullPath[ intPathOut + strlen( filesToMerge->id ) + 6 ];
     char type[2];
-    int maskPadding, rowPixels, columnPixels, row, column;
+    int maskPadding, maskPadding02, rowPixels, columnPixels, row, column;
     HEADER headerImg01, headerImg02, headerMask, headerOut;
     HEADERINFO hinfoImg01, hinfoImg02, hinfoMask, hinfoOut;
     PIXELCOLOR pColorImg01, pColorImg02, pColorMask, pColorOut;
