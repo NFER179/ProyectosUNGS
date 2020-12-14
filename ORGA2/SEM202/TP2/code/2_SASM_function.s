@@ -16,7 +16,7 @@ enmascarar_asm:
     mov ebp, esp  ; enter
 
     mov ebx,0 ;inicio la variable en 0 (registro para desplazarce)
-    mov edx,[ebp+24] ;cantidad de bytes por imagen
+    mov edx,[ebp+20] ;cantidad de bytes por imagen
     movq mm0,qword[blanco] ;paso a mm0 el blanco para usarlo con simd
 
 loopeo:
