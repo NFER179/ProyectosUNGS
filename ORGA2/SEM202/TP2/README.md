@@ -15,5 +15,5 @@ En el siguiente grafico se muestran los tiempos representado por una "t" en cada
 Ejemplos de como quedan las imagenes:
 
 ![Screenshot](5img_0015.bmp)
-![Screenshot](foto2.png)
-![Screenshot](foto3.png)
+![Screenshot](foto2.jpg)
+![Screenshot](foto3.jpg)
